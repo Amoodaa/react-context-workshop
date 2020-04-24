@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Page from './components/Page';
+import Controls from './components/Controls';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    logged: false,
+    admin: false,
+  };
+
+  toggle = (key) => () =>
+    this.setState(({ [key]: prevValue }) => ({ [key]: !prevValue }));
+
+  render() {
+    const { logged, admin } = this.state;
+    return (
+      <div className="App">
+        <Controls logged={logged} admin={admin} toggle={this.toggle} />
+        <Page logged={logged} admin={admin} />
+      </div>
+    );
+  }
 }
 
 export default App;
