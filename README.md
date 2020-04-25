@@ -1,68 +1,125 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Context API
 
-## Available Scripts
 
-In the project directory, you can run:
+In a typical React application, data is passed top-down (parent to child) via props, but this can be cumbersome for certain types of props (e.g. locale preference, UI theme) that are required by many components within an application.
 
-### `yarn start`
+## Props drilling:
+Props drilling is when a higher component owns a piece of data that a lower component needs, you will need to pass props down to components for the sole purpose of passing it down to the child component that needs it.
+Lets take a look at this example:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```jsx
+const Button = ({ theme }) => (
+  <button style={{ backgroundColor: theme === "dark" ? "black" : "blue" }}>
+    Click me
+  </button>
+);
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+const Submenu = ({ theme }) => <Button theme={theme} />;
 
-### `yarn test`
+const Toolbar = ({ theme }) => <Submenu theme={theme} />;
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+class App extends Component {
+  state = {
+    theme: "dark",
+  };
 
-### `yarn build`
+  render() {
+    return <Toolbar theme={this.state.theme} />;
+  }
+}
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+We had to pass down props through multiple levels until it got to the button which decided how the button will look, what if we needed that in another component thats not the toolbar?
+Imagine another buttons in the app.
+Thats when Props drilling becomes a problem, code becomes messy, a lot of redundant code.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## How can we solve this problem?
+React provides us with something called the Context API.
+Context in English means "a frame that surrounds the event and provides resources for its appropriate interpretation".
+In React terms, its the information that the component needs to decide some decisions on its behaviour and appearance. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## What's Context in React?
+> Context provides a way to pass data through the component tree without having to pass props down manually at every level.
 
-### `yarn eject`
+### OK I think i got it... show me code!
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+But first we will go over the API:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. React.createContext
+```jsx
+const MyContext = React.createContext(defaultValue);
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+export default MyContext;
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Creates a Context object. When React renders a component that subscribes to this Context object it will read the current context value from the closest matching Provider above it in the tree.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. Context.Provider
+Every Context object comes with a Provider React component that allows consuming components to subscribe to context changes.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Accepts a value prop to be passed to consuming components that are descendants of this Provider. One Provider can be connected to many consumers. Providers can be nested to override values deeper within the tree.
 
-### Code Splitting
+```jsx
+import MyContext from './MyContext'
+const App = () => 
+ <MyContext.Provider value={/* some value */}>
+ {/* React children (components) that can subscribe and see the value passed above */}
+ </MyContext.Provider>
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+All consumers that are descendants of a Provider will re-render whenever the Provider’s value prop changes.
 
-### Analyzing the Bundle Size
+### 3. Context.Consumer
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```jsx
+import MyContext from "./MyContext";
 
-### Making a Progressive Web App
+const Button = () => (
+  <MyContext.Consumer>
+    {(value) => <button /* render something based on the context value */ />}
+  </MyContext.Consumer>
+);
+```
+A React component that subscribes to context changes. This lets you subscribe to a context within a function component.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Requires a function as a child. The function receives the current context value and returns a React node. The value argument passed to the function will be equal to the value prop of the closest Provider for this context above in the tree.
 
-### Advanced Configuration
+### 4. Class.contextType
+```jsx
+import MyContext from "./MyContext";
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+class MyClass extends React.Component {
+  componentDidMount() {
+    let value = this.context;
+    /* perform a side-effect at mount using the value of MyContext */
+  }
+  componentDidUpdate() {
+    let value = this.context;
+    /* ... */
+  }
+  componentWillUnmount() {
+    let value = this.context;
+    /* ... */
+  }
+  render() {
+    let value = this.context;
+    /* render something based on the value of MyContext */
+  }
+}
 
-### Deployment
+MyClass.contextType = MyContext;
+```
+The contextType property on a class can be assigned a Context object created by React.createContext(). This lets you consume the nearest current value of that Context type using this.context. You can reference this in any of the lifecycle methods including the render function.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+## Exercise
 
-### `yarn build` fails to minify
+Enough talking, lets do an exercise.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+1. clone this repo
+2. `npm i && npm start`
+
+### Task
+You will find a React app, that has a lot of components, take your time reading them.
+You wil notice that it applies props drilling extensively.
+And you will find a bug somewhere, that the app doesnt work successfully, fix it, make sure its working, THEN refactor the code to use Context.
