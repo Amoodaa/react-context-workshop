@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Page from './components/Page';
 import Controls from './components/Controls';
+import AuthContext from './AuthContext';
 
 class App extends React.Component {
   state = {
@@ -17,7 +18,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <Controls logged={logged} admin={admin} toggle={this.toggle} />
-        <Page admin={admin} />
+        <AuthContext.Provider value={{ logged, admin }}>
+          <Page />
+        </AuthContext.Provider>
       </div>
     );
   }
