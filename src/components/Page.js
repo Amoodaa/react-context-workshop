@@ -3,7 +3,7 @@ import CardBox from './CardBox';
 
 class Page extends React.Component {
   state = {
-    users: ['anna', 'lamia', 'ziegler', 'card1', 'card2', 'card3'],
+    users: ['Anna', 'Lamia', 'Ziegler', 'Jett', 'Clair', 'Aoi'],
   };
 
   deleteName = (name) =>
@@ -14,12 +14,17 @@ class Page extends React.Component {
     const { users } = this.state;
     if (!logged) return 'Please login first';
     return (
-      <CardBox
-        logged={logged}
-        admin={admin}
-        users={users}
-        deleteName={this.deleteName}
-      />
+      <div className="page-container">
+        <div>
+          <h2>Dashboard / Users List</h2>
+        </div>
+        <CardBox
+          logged={logged}
+          admin={admin}
+          users={users}
+          deleteName={this.deleteName}
+        />
+      </div>
     );
   }
 }
