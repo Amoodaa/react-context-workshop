@@ -5,6 +5,7 @@ In a typical React application, data is passed top-down (parent to child) via pr
 ## Props drilling:
 
 Props drilling is when a higher component owns a piece of data that a lower component needs, you will need to pass props down to components for the sole purpose of passing it down to the child component that needs it.
+
 Lets take a look at this example:
 
 ```jsx
@@ -44,15 +45,19 @@ class App extends Component {
 export default App;
 ```
 
-We had to pass down props through multiple levels until it got to the button which decided how the button will look, what if we needed that in another component thats not the toolbar?
-Imagine another buttons in the app.
-Thats when Props drilling becomes a problem, code becomes messy, a lot of redundant code.
+We had to pass down props through multiple levels until it got to the button which decided how the button will look, what if we needed that in another component that's not the toolbar?
+
+Imagine other buttons in the app.
+
+That's when Props drilling becomes a problem, code becomes messy, a lot of redundant code.
 
 ## How can we solve this problem?
 
-React provides us with something called the Context API.
+React provides us with the Context API.
+
 Context in English means "a frame that surrounds the event and provides resources for its appropriate interpretation".
-In React terms, its the information that the component needs to decide some decisions on its behaviour and appearance.
+
+In React terms, It's the information that the component needs to decide some decisions on it's behaviour and appearance.
 
 ## What's Context in React?
 
@@ -136,7 +141,7 @@ The contextType property on a class can be assigned a Context object created by 
 
 ## Example
 
-Lets see how we can do the previous example with Context instead of props drilling
+Lets see how we can do the previous example with Context instead of props drilling:
 
 ```jsx
 // ThemeContext.js
@@ -208,7 +213,9 @@ Enough talking, lets do an exercise.
 ### Task
 
 You will find a React app, that has a lot of components, take your time reading them.
+
 You wil notice that it applies props drilling extensively.
+
 And you will find a bug somewhere, that the app doesnt work successfully, fix it, make sure its working, THEN refactor the code to use Context.
 
 ## Last 10 mins:
