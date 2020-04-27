@@ -17,7 +17,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Controls logged={logged} admin={admin} toggle={this.toggle} />
-        <Page logged={logged} admin={admin} />
+        <Page admin={admin} />
       </div>
     );
   }

@@ -1,15 +1,10 @@
 import React from 'react';
 import Card from './Card';
 
-const CardBox = ({ admin, users, deleteName }) => (
+const CardBox = ({ users, deleteName }) => (
   <div className="cardbox">
     {users.map((name) => (
-      <Card
-        key={name}
-        name={name}
-        admin={admin}
-        onClick={() => deleteName(name)}
-      />
+      <Card key={name} name={name} onClick={() => deleteName(name)} />
     ))}
   </div>
 );

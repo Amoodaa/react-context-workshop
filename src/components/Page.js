@@ -8,7 +8,7 @@ class Page extends React.Component {
 
   deleteName = (name) =>
     this.setState(({ users }) => ({
-      users: users.filter((name2) => name2 !== name),
+      users: users.filter(name),
     }));
 
   render() {
