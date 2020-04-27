@@ -215,11 +215,13 @@ Enough talking, lets do an exercise.
 
 ### Task
 
-You will find a React app, that has a lot of components, take your time reading the code.
+Open the repo in your editor, you will find a react app that has a lot of components, take your time reading the code.
 
-You wil notice that it applies props drilling extensively.
+You will notice that it applies props drilling extensively.
 
-Refactor the code to use Context.
+Try the app, you will find weird behaviour, I didn't know how to fix the bugs, can you help me here?
+
+Once you finish and its working as intended, **refactor the code to use Context**.
 
 ## Last 10 mins:
 
