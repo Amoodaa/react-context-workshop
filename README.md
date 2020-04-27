@@ -212,14 +212,14 @@ Enough talking, lets do an exercise.
 
 ### Task
 
-You will find a React app, that has a lot of components, take your time reading them.
+You will find a React app, that has a lot of components, take your time reading the code.
 
 You wil notice that it applies props drilling extensively.
 
-And you will find a bug somewhere, that the app doesnt work successfully, fix it, make sure its working, THEN refactor the code to use Context.
+Refactor the code to use Context.
 
 ## Last 10 mins:
 
 Casual talking about When to use context, When not to use context.
-<br />
+
 Everything here was taken from https://reactjs.org/docs/context.html
