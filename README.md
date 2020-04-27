@@ -10,10 +10,21 @@ Lets take a look at this example:
 
 ```jsx
 // App.js
-const Button = ({ theme, text }) => (
-  <button style={{ backgroundColor: theme === "dark" ? "black" : "blue" }}>
-    {text}
-  </button>
+
+class App extends Component {
+  state = {
+    theme: "dark",
+  };
+
+  render() {
+    return <Toolbar theme={this.state.theme} />;
+  }
+}
+
+const Toolbar = ({ theme }) => (
+  <div className="toolbar">
+    <Submenu theme={theme} />
+  </div>
 );
 
 const Submenu = ({ theme }) => (
@@ -27,21 +38,12 @@ const Submenu = ({ theme }) => (
   </ul>
 );
 
-const Toolbar = ({ theme }) => (
-  <div className="toolbar">
-    <Submenu theme={theme} />
-  </div>
+const Button = ({ theme, text }) => (
+  <button style={{ backgroundColor: theme === "dark" ? "black" : "blue" }}>
+    {text}
+  </button>
 );
 
-class App extends Component {
-  state = {
-    theme: "dark",
-  };
-
-  render() {
-    return <Toolbar theme={this.state.theme} />;
-  }
-}
 export default App;
 ```
 
@@ -157,15 +159,20 @@ export default ThemeContext;
 import React from "react";
 import ThemeContext from "./ThemeContext";
 
-const Button = ({ text }) => (
-  <ThemeContext.Consumer>
-    {({ theme }) => (
-      <button style={{ backgroundColor: theme === "dark" ? "black" : "blue" }}>
-        {text}
-      </button>
-    )}
-  </ThemeContext.Consumer>
-);
+class App extends Component {
+  state = {
+    theme: "dark",
+  };
+
+  render() {
+    const { theme } = this.state;
+    return (
+      <ThemeContext.Provider value={{ theme }}>
+        <Toolbar />
+      </ThemeContext.Provider>
+    );
+  }
+}
 
 const Submenu = ({ theme }) => (
   <ul className="toolbar-submenu">
@@ -184,20 +191,16 @@ const Toolbar = () => (
   </div>
 );
 
-class App extends Component {
-  state = {
-    theme: "dark",
-  };
+const Button = ({ text }) => (
+  <ThemeContext.Consumer>
+    {({ theme }) => (
+      <button style={{ backgroundColor: theme === "dark" ? "black" : "blue" }}>
+        {text}
+      </button>
+    )}
+  </ThemeContext.Consumer>
+);
 
-  render() {
-    const { theme } = this.state;
-    return (
-      <ThemeContext.Provider value={{ theme }}>
-        <Toolbar />
-      </ThemeContext.Provider>
-    );
-  }
-}
 export default App;
 ```
 
